@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:flow="http://www.springframework.org/schema/webflow-config"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+                             http://www.springframework.org/schema/context 
+                                http://www.springframework.org/schema/context/spring-context-4.3.xsd
+                                http://www.springframework.org/schema/tx
+                                http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+                                http://www.springframework.org/schema/mvc
+                                http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                                http://www.springframework.org/schema/webflow-config
+	http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.4.xsd
+">
+    <import resource="hibernate.xml" />
+    <import resource="flow-definition.xml"/>
+    <context:component-scan base-package="com.it355.milankabjelic2626" />
+    <mvc:annotation-driven />
+    <mvc:default-servlet-handler />
+    
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    
+    <mvc:resources mapping="/assets/**" location="/WEB-INF/assets/" />
+    <mvc:resources mapping="/images/**" location="/WEB-INF/images/" />
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" >
+        <property name="defaultLocale" value="sr" />
+    </bean>
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>/WEB-INF/lang/proizvod</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager"  class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+ 
+    <bean id="hibernateDao" class="com.it355.milankabjelic2626.hibernate.dao.HibernateDaoImpl"></bean>
+    
+   <mvc:annotation-driven conversion-service="conversionService" />
+   <tx:annotation-driven />
+   <mvc:default-servlet-handler />
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.it355.milankabjelic2626.converter.IntegerToKolekcija" />
+            </set>
+        </property>
+    </bean>
+</beans>

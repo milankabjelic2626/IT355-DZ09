@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+http://www.springframework.org/schema/webflow/spring-webflow-2.4.xsd">
+
+	<var name="registracija" class="com.it355.milankabjelic2626.model.Registracija" />
+	
+	<view-state id="displayRegisterView" view="../WEB-INF/jsp/registracija.jsp" model="registracija">
+		<transition on="performRegister" to="performRegisterAction" />
+	</view-state>
+
+	<action-state id="performRegisterAction">
+		<evaluate expression="registracijaService.registracija(registracija)" />
+
+		<transition on="success" to="uspesnaRegistracija" />
+		<transition on="error" to="greska" />
+
+	</action-state>
+	
+	<view-state id="uspesnaRegistracija" view="../WEB-INF/jsp/uspesnaRegistracija.jsp" model="registracija"/>
+
+	<view-state id="greska" view="../WEB-INF/jsp/greska.jsp" model="registracija"/>
+</flow>
